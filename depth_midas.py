@@ -1,7 +1,6 @@
-# Necessary Imports
 import cv2
 import torch
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # Download MiDaS dataset
 midas = torch.hub.load('intel-isl/MiDaS', 'MiDaS_small')
@@ -12,8 +11,11 @@ midas.eval()
 transform = torch.hub.load('intel-isl/MiDaS', 'transforms')
 transform = transform.small_transform
 
-# Hook into opencv
-cap = cv2.VideoCapture(0)
+# Load video
+video_path = "./sample_video2.mp4"
+cap = cv2.VideoCapture(video_path)
+
+# Loop through frames
 while cap.isOpened():
     ret, frame = cap.read()
 
@@ -33,8 +35,6 @@ while cap.isOpened():
 
         output = prediction.cpu().numpy()
 
-        print(output)
-
     # plt.imshow(output)
     
     depth_colormap = cv2.applyColorMap(
@@ -49,4 +49,5 @@ while cap.isOpened():
         cap.release()
         cv2.destroyAllWindows
 
-plt.show()
+cap.release()
+cv2.destroyAllWindows()

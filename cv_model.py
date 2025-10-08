@@ -4,8 +4,8 @@ from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader
 import os
 
-# Paths
-data_dir = "C:/Users/Babu/Downloads/My First Project.v2i.folder (1)"  # Point to your Roboflow dataset
+# Training dataset
+data_dir = "./training_data"
 
 # Hyperparameters
 batch_size = 32
@@ -32,8 +32,8 @@ valid_loader = DataLoader(valid_dataset, batch_size=batch_size)
 model = models.resnet18(pretrained=True)
 model.fc = nn.Linear(model.fc.in_features, num_classes)  # Update final layer
 
-# FORCE CPU USAGE
-device = torch.device("cpu")
+# Use CPU if GPU is not available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
 # Loss and optimizer
@@ -60,4 +60,3 @@ for epoch in range(num_epochs):
 
 # Save model
 torch.save(model.state_dict(), "resnet18_scene_classifier.pth")
-print("Model saved to resnet18_scene_classifier.pth")
